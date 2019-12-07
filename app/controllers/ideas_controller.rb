@@ -24,6 +24,11 @@ class IdeasController < ApplicationController
   # POST /ideas
   # POST /ideas.json
   def create
+    picture_size=idea_params[:picture_size].split("x")
+    picture=idea_params[:picture].resize_to_fit(picture_size[0],picture_size[1]) 
+    idea_params[:picture]=picture
+    idea_params.delete(:picture_size)
+
     @idea = Idea.new(idea_params)
 
     respond_to do |format|
@@ -69,6 +74,6 @@ class IdeasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def idea_params
-      params.require(:idea).permit(:name, :description, :picture, :reminder)
+      params.require(:idea).permit(:name, :description, :picture, :reminder, :picture_size)
     end
 end
